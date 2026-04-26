@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lexer</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <h1>Lexer</h1>
+        </header>
+
+        <div class="container">
+            <div class="toolbar">
+                <span class="section-title">Source Code</span>
+                <div class="controls">
+                    <select id="langSelect">
+                    </select>
+                    <input type="file" id="fileInput" hidden>
+                    <label for="fileInput" class="upload-label">Upload</label>
+                </div>
+            </div>
+
+            <div class="editor-wrapper">
+                <textarea id="editor" class="editor" spellcheck="false" placeholder="// type code here..."></textarea>
+            </div>
+
+            <button id="runLexer">Run Lexer</button>
+
+            <div id="lexer-output-container">
+                <span class="section-title">Tokens</span>
+                <div id="tokenOutput" class="token-grid"></div>
+            </div>
+        </div>
+    </div>
+    <script src="lexer.js"></script>
+</body>
+</html>

@@ -32,6 +32,34 @@ body {
     justify-content: center;
 }
 
+.navbar {
+    display: flex;
+    gap: 16px;
+    margin-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 12px;
+}
+
+.nav-link {
+    text-decoration: none;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--text-muted);
+    transition: color 0.2s;
+    padding: 4px 8px;
+    border-radius: 6px;
+}
+
+.nav-link:hover {
+    color: var(--accent);
+    background-color: var(--bg-page);
+}
+
+.nav-link.active {
+    color: var(--accent);
+    background-color: rgba(37, 99, 235, 0.1);
+}
+
 .wrapper {
     max-width: 850px;
     width: 100%;

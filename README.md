@@ -5,6 +5,9 @@
 | Addien Zafriyan Al Akhsan | 5025241058 | B |
 | Raden Kurniawan Agung Fitrianto | 5025241104 | B |
 
+## Website Link
+[Website Link](https://theradn.github.io/tugas-praktikum-1-2-otomata/)
+
 ## Cara Penggunaan Program
 ### Tokenizer / Lexer
 - Masukkan source code secara manual atau upload file

@@ -1,71 +1,57 @@
-const MULTI_CHAR_OPS = ['==', '++', '--', '>=', '<=', '||', '&&', '===', '!==', '+=', '-=', '*=', '/=', '%=', '!='];
+const MULTI_CHAR_OPS = ['==', '++', '--', '||', '&&', '===', '!==', '+=', '-=', '*=', '/=', '%=', '!='];
 
 const LANGUAGE_KEYWORDS = {
-    javascript: {
-        "if": "IF",
-        "else": "ELSE",
-        "function": "FUNCTION",
-        "return": "RETURN",
-        "let": "LET",
-        "const": "CONST"
-    },
-    python: {
-        "if": "IF",
-        "else": "ELSE",
-        "def": "FUNCTION",
-        "return": "RETURN",
-        "class": "CLASS"
-    },
-    java: {
-        "if": "IF",
-        "else": "ELSE",
-        "public": "MODIFIER",
-        "static": "MODIFIER",
-        "void": "TYPE",
-        "return": "RETURN",
-        "class": "CLASS"
-    },
-    cpp: {
-        "if": "IF",
-        "else": "ELSE",
-        "int": "TYPE",
-        "include": "PREPROCESSOR",
-        "return": "RETURN",
-        "namespace": "NAMESPACE"
-    },
-    c: {
-        "if": "IF",
-        "else": "ELSE",
-        "switch": "SWITCH",
-        "case": "CASE",
-        "struct": "STRUCTURE",
-        "typedef": "TYPE_DEFINITION",
-        "return": "RETURN",
-        "void": "TYPE",
-        "int": "TYPE",
-        "char": "TYPE",
-        "sizeof": "OPERATOR",
-        "static": "STORAGE_CLASS",
-        "extern": "STORAGE_CLASS"
-    },
-    ruby: {
-        "if": "IF",
-        "else": "ELSE",
-        "def": "FUNCTION",
-        "end": "TERMINATOR",
-        "return": "RETURN",
-        "module": "MODULE"
-    },
-    go: {
-        "if": "IF",
-        "else": "ELSE",
-        "func": "FUNCTION",
-        "package": "PACKAGE",
-        "import": "IMPORT",
-        "chan": "CHANNEL",
-        "range": "ITERATOR"
-    }
+    javascript: new Set([
+        "if", "else", "function", "return", "let", "const", "var", "true", "false",
+        "null", "undefined", "for", "while", "do", "switch", "case", "break",
+        "continue", "try", "catch", "finally", "throw", "class", "extends",
+        "import", "export", "await", "async", "typeof", "instanceof", "this", "new"
+    ]),
+    python: new Set([
+        "if", "else", "elif", "def", "return", "class", "True", "False", "None",
+        "for", "while", "break", "continue", "import", "from", "as", "try",
+        "except", "finally", "raise", "with", "lambda", "yield", "async", "await",
+        "in", "is", "and", "or", "not", "pass", "del", "global", "nonlocal"
+    ]),
+    java: new Set([
+        "if", "else", "public", "static", "void", "return", "class", "interface",
+        "extends", "implements", "package", "import", "new", "this", "super",
+        "for", "while", "do", "switch", "case", "break", "continue", "try",
+        "catch", "finally", "throw", "throws", "private", "protected", "final",
+        "abstract", "synchronized", "volatile", "transient", "instanceof", "enum"
+    ]),
+    cpp: new Set([
+        "if", "else", "int", "include", "return", "namespace", "using", "class",
+        "struct", "template", "typename", "public", "private", "protected",
+        "virtual", "override", "const", "static", "extern", "inline", "auto",
+        "new", "delete", "this", "friend", "operator", "try", "catch", "throw",
+        "bool", "char", "float", "double", "void", "switch", "case", "break"
+    ]),
+    c: new Set([
+        "if", "else", "switch", "case", "struct", "typedef", "return", "void",
+        "int", "char", "float", "double", "sizeof", "static", "extern", "const",
+        "volatile", "register", "auto", "break", "continue", "do", "while",
+        "for", "goto", "if", "enum", "union", "signed", "unsigned", "long", "short"
+    ]),
+    ruby: new Set([
+        "if", "else", "elsif", "def", "end", "return", "module", "class", "self",
+        "yield", "super", "begin", "rescue", "ensure", "nil", "true", "false",
+        "and", "or", "not", "unless", "until", "while", "for", "do", "next",
+        "break", "retry", "redo", "alias", "undef", "defined?"
+    ]),
+    go: new Set([
+        "if", "else", "func", "package", "import", "chan", "range", "type",
+        "struct", "interface", "map", "var", "const", "return", "defer", "go",
+        "select", "switch", "case", "default", "fallthrough", "for", "break",
+        "continue", "goto", "bool", "string", "error", "nil", "true", "false"
+    ])
 };
+
+const MATH_FUNCTIONS = new Set([
+    "abs", "acos", "asin", "atan", "atan2", "ceil", "cos", "cosh", 
+    "exp", "floor", "log", "log10", "max", "min", "pow", "random", 
+    "round", "sin", "sinh", "sqrt", "tan", "tanh", "trunc"
+]);
 
 const select = document.getElementById('langSelect');
 select.innerHTML = '';
@@ -179,6 +165,12 @@ const lexer = (input, language = 'javascript') => {
             continue;
         }
 
+        if ("@#$%^&~`".includes(char)) {
+            tokens.push({ type: 'SYMBOL', value: char });
+            i++;
+            continue;
+        }
+
         if (char === '"' || char === "'") {
             let str = "";
             i++; // Skip the opening quote
@@ -197,8 +189,10 @@ const lexer = (input, language = 'javascript') => {
                 identifier += input[i];
                 i++;
             }
-            if (keywords[identifier]) {
-                tokens.push({ type: 'KEYWORD', value: keywords[identifier] });
+            if (keywords.has(identifier)) {
+                tokens.push({ type: 'KEYWORD', value: identifier });
+            } else if (MATH_FUNCTIONS.has(identifier)) {
+                tokens.push({ type: 'MATH_FUNCTION', value: identifier });
             } else {
                 tokens.push({ type: 'IDENTIFIER', value: identifier });
             }
